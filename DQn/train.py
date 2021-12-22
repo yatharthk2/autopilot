@@ -16,7 +16,7 @@ from Dqn_def import *
 
 def run(training_mode, pretrained, num_episodes=1000, exploration_max=1):
        
-    env = gym.make("highway-fast-v0") # can change the environmeent accordingly
+    env = gym.make("Breakout-v0") # can change the environmeent accordingly
     env = create_env(env)  # Wraps the environment so that frames are grayscale 
     observation_space = env.observation_space.shape
     action_space = env.action_space.n
@@ -91,3 +91,5 @@ def run(training_mode, pretrained, num_episodes=1000, exploration_max=1):
         torch.save(agent.DONE_MEM,   "DONE_MEM.pt")
     
     env.close()
+
+run(training_mode=True)
