@@ -103,6 +103,10 @@ def plot_durations():
         display.clear_output(wait=True)
         display.display(plt.gcf())
 
+def save_checkpoint(state , filename = "checkpoint.pth"):
+    print('saving cheakpoint')
+    torch.save(state, filename)
+
 def optimize_model():
     if len(memory) < BATCH_SIZE:
         return
@@ -172,6 +176,9 @@ for i_episode in range(num_episodes):
             plot_durations()
             break
     # Update the target network, copying all weights and biases in DQN
+    if i_episode % 5 == 0:
+        checkpoint = {'state_dict': policy_net.state_dict() , 'optimizer': optimizer.state_dict()}
+        save_checkpoint(checkpoint)
     if i_episode % TARGET_UPDATE == 0:
         target_net.load_state_dict(policy_net.state_dict())
         print(policy_net.state_dict)
