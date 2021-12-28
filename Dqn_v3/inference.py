@@ -58,22 +58,23 @@ def load_checkpoint(checkpoint):
 
 load_checkpoint(torch.load('checkpoint.pth'))
 
-with torch.no_grad():
-    env.reset()
-    last_screen = get_screen()
-    current_screen = get_screen()
-    state = current_screen - last_screen
-    for t in count():
-        action = select_action(state)
-        _, reward, done, _ = env.step(action.item())
-        reward = torch.tensor([reward], device=device)
-
-        last_screen = current_screen
+for k_episode in range(100):
+    with torch.no_grad():
+        env.reset()
+        last_screen = get_screen()
         current_screen = get_screen()
-        if not done:
-            next_state = current_screen - last_screen
-        else:
-            next_state = None
+        state = current_screen - last_screen
+        for t in count():
+            action = select_action(state)
+            _, reward, done, _ = env.step(action.item())
+            reward = torch.tensor([reward], device=device)
 
-        state = next_state
+            last_screen = current_screen
+            current_screen = get_screen()
+            if not done:
+                next_state = current_screen - last_screen
+            else:
+                next_state = None
+
+            state = next_state
 

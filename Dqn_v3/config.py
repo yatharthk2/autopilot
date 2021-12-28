@@ -4,4 +4,4 @@ EPS_START = 0.9
 EPS_END = 0.05
 EPS_DECAY = 200
 TARGET_UPDATE = 10
-num_episodes = 40
+num_episodes = 200
