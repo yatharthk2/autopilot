@@ -12,6 +12,7 @@ import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
 import torchvision.transforms as T
+import time
 
 from config import *
 from envs.highway_fast_v0 import *
@@ -21,6 +22,11 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 resize = T.Compose([T.ToPILImage(),
                     T.Resize(40, interpolation=Image.CUBIC),
                     T.ToTensor()])
+
+def load_checkpoint(checkpoint):
+    print("loading checkpoint")
+    target_net.load_state_dict(checkpoint['state_dict'])
+    policy_net.load_state_dict(checkpoint['state_dict'])
 
 def get_screen():
     screen = env.render(mode='rgb_array').transpose((2, 0, 1))
@@ -44,31 +50,33 @@ def select_action(state):
     else:
         return torch.tensor([[random.randrange(n_actions)]], device=device, dtype=torch.long)
 
-
 init_screen = get_screen()
 _, _, screen_height, screen_width = init_screen.shape
 n_actions = env.action_space.n
+memory = ReplayMemory(10000)
+
 
 policy_net = DQN(screen_height, screen_width, n_actions).to(device)
 target_net = DQN(screen_height, screen_width, n_actions).to(device)
-
-def load_checkpoint(checkpoint):
-    print("loading checkpoint")
-    target_net.load_state_dict(checkpoint['state_dict'])
-
 load_checkpoint(torch.load('checkpoint.pth'))
 
-for k_episode in range(100):
-    with torch.no_grad():
+with torch.no_grad():
+
+    for i_episode in range(num_episodes):
+        # Initialize the environment and state
+        
         env.reset()
+        time.sleep(10)
         last_screen = get_screen()
         current_screen = get_screen()
         state = current_screen - last_screen
         for t in count():
+            # Select and perform an action
             action = select_action(state)
             _, reward, done, _ = env.step(action.item())
             reward = torch.tensor([reward], device=device)
 
+            # Observe new state
             last_screen = current_screen
             current_screen = get_screen()
             if not done:
@@ -76,5 +84,18 @@ for k_episode in range(100):
             else:
                 next_state = None
 
+            # Store the transition in memory
+            memory.push(state, action, next_state, reward)
+
+            # Move to the next state
             state = next_state
+        
+
+print('Complete')
+env.render()
+env.close()
+plt.ioff()
+plt.show()
+        
+
 
