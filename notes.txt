@@ -1,3 +1,0 @@
-
-
-python experiments.py evaluate configs/HighwayEnv/env.json configs/HighwayEnv/agents/DQNAgent/ddqn.json --train --episodes=200
