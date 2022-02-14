@@ -1,0 +1,2 @@
+[rl_agents.trainer.evaluation:INFO] Episode 0 score: 12.1 
+[rl_agents.trainer.evaluation:INFO] Saved DQNAgent model to D:\work\projects\RL_archives\autopilot\scripts\out\HighwayEnv\DQNAgent\run_20220214-075817_22024\checkpoint-0.tar 
