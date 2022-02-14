@@ -16,7 +16,6 @@
 # from rl_agents.configuration import serialize
 # from rl_agents.trainer.graphics import RewardViewer
 # from rl_agents.trainer.monitor import MonitorV2
-# import csv
 
 # logger = logging.getLogger(__name__)
 
@@ -319,15 +318,6 @@
 #         self.writer.add_scalar('episode/fps', len(rewards) / duration, episode)
 #         self.writer.add_histogram('episode/rewards', rewards, episode)
 #         logger.info("Episode {} score: {:.1f}".format(episode, sum(rewards)))
-#         filename = "university_records.csv"
-#         print('this is test')
-#         with open('data.csv', 'w') as csvfile: 
-#             # creating a csv writer object 
-#             csvwriter = csv.writer(csvfile) 
-                
-#             # writing the fields 
-#             csvwriter.writerow(sum(rewards)) 
-                
 
 #     def after_some_episodes(self, episode, rewards,
 #                             best_increase=1.1,

@@ -58,6 +58,9 @@ def evaluate(environment_config, agent_config, options):
         logger.configure(VERBOSE_CONFIG)
     env = load_environment(environment_config)
     # env.config["show_trajectories"] = True
+    env.config["offroad_terminal"] = True
+
+    
     agent = load_agent(agent_config, env)
     run_directory = None
     if options['--name-from-config']:
